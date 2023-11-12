@@ -78,7 +78,6 @@ app.get("/get-pg-version", async (req, res) => {
 //   res.send("Hi");
 // });
 app.post("/convert-to-image", async (req, res) => {
-  console.log(req.body, "the log");
   const htmlContent = req.body.htmlBody;
   if (!htmlContent) {
     res.status(401).json({ error: "trying to connect " });
