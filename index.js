@@ -85,8 +85,9 @@ app.post("/convert-to-image", async (req, res) => {
   }
   try {
     const image = await nodeHtmlToImage({ html: htmlContent });
-    res.writeHead(200, { "content-Type": "image/png" });
-    res.end(image, "binary");
+    // res.writeHead(200, { "content-Type": "image/png" });
+    // res.end(image, "binary");
+    res.status(500).send("Working perfectly");
   } catch (error) {
     console.error(error);
     res.status(500).send("Error converting HTML to  image");
