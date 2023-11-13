@@ -100,14 +100,30 @@ app.post("/accept-html", async (req, res) => {
   }
   try {
     cloudinary.uploader
-      .upload_stream({ resource_type: "raw" }, (error, result) => {
+      .upload_stream({ resource_type: "raw" }, async (error, result) => {
         if (error) {
           console.error(error);
           return res
             .status(500)
             .json({ error: "Error uploading the html file to cloudinary" });
         }
-        res.json({ cloudinaryUrl: result.secure_url });
+        // res.json({ cloudinaryUrl: result.secure_url });
+        const cloudinaryUrl = result.secure_url;
+        try {
+          const client = await pool.connect();
+          try {
+            const query =
+              "INSERT INTO html_files (cloudinary_url) VALUES ($1) RETURNING id";
+            const values = [cloudinaryUrl];
+            const response = await client.query(query, values);
+            res.json({ cloudinaryUrl, id: response.rows[0].id });
+          } finally {
+            client.release();
+          }
+        } catch (dbError) {
+          console.error(dbError);
+          res.status(500).json({ error: "Error inserting into databse" });
+        }
       })
       .end(htmlContent);
   } catch (error) {
@@ -116,6 +132,9 @@ app.post("/accept-html", async (req, res) => {
   }
 });
 
+app.get("/test", (req, res) => {
+  res.send("successful on getting");
+});
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
