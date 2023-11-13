@@ -93,7 +93,7 @@ app.post("/convert-to-image", async (req, res) => {
   }
 });
 
-app.get("/accept-html", async (req, res) => {
+app.post("/accept-html", async (req, res) => {
   const htmlContent = req.body.htmlReq;
   if (!htmlContent) {
     res.status(400).json({ error: "No HTML is provided " });
