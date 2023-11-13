@@ -4,6 +4,7 @@ const { Pool } = require("pg");
 const fs = require("fs");
 const path = require("path");
 const nodeHtmlToImage = require("node-html-to-image");
+const cloudinary = require("./cloudinary");
 const { error } = require("console");
 
 require("dotenv").config();
@@ -89,6 +90,29 @@ app.post("/convert-to-image", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send("Error converting HTML to  image");
+  }
+});
+
+app.get("/accept-html", async (req, res) => {
+  const htmlContent = req.body.htmlReq;
+  if (!htmlContent) {
+    res.status(400).json({ error: "No HTML is provided " });
+  }
+  try {
+    cloudinary.uploader
+      .upload_stream({ resource_type: "raw" }, (error, result) => {
+        if (error) {
+          console.error(error);
+          return res
+            .status(500)
+            .json({ error: "Error uploading the html file to cloudinary" });
+        }
+        res.json({ cloudinaryUrl: result.secure_url });
+      })
+      .end(htmlContent);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error processing HTML content" });
   }
 });
 
