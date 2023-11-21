@@ -13,7 +13,7 @@ const { error } = require("console");
 require("dotenv").config();
 
 const app = express();
-const secretKey = crypto.randomBytes(32).toString(hex);
+const secretKey = crypto.randomBytes(32).toString("hex");
 const cors = require("cors");
 app.use(cors());
 app.use(express.json({ limit: "50mb" }));
