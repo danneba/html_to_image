@@ -3,6 +3,9 @@ const bodyParser = require("body-parser");
 const { Pool } = require("pg");
 const fs = require("fs");
 const path = require("path");
+const bcrypt = require("bcrypt");
+const crypto = require("crypto");
+const jwt = require("jsonwebtoken");
 const nodeHtmlToImage = require("node-html-to-image");
 const cloudinary = require("./cloudinary");
 const { error } = require("console");
@@ -10,6 +13,7 @@ const { error } = require("console");
 require("dotenv").config();
 
 const app = express();
+const secretKey = crypto.randomBytes(32).toString(hex);
 const cors = require("cors");
 app.use(cors());
 app.use(express.json({ limit: "50mb" }));
@@ -93,7 +97,19 @@ app.post("/convert-to-image", async (req, res) => {
   }
 });
 
+app.post("/login", async (req, res) => {
+  const payload = {
+    id: "1234",
+    username: "danneba",
+    email: "danielkassahun2@gmail.com",
+  };
+  const token = jwt.sign(payload, secretKey, { expiresIn: "24h" });
+  res.json({
+    token: "token",
+  });
+});
 app.post("/accept-html", async (req, res) => {
+  console.log("htmlcontent", req.body);
   const htmlContent = req.body.htmlReq;
   if (!htmlContent) {
     res.status(400).json({ error: "No HTML is provided " });
@@ -129,6 +145,22 @@ app.post("/accept-html", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error processing HTML content" });
+  }
+});
+
+app.post("/emails", async (req, res) => {
+  try {
+    const client = await pool.connect();
+    if (!client) {
+      res.send("Database not connected");
+    }
+    const result = await client.query("SELECT * FROM html_files");
+    const data = result.rows;
+    client.release();
+    res.json({ data });
+  } catch (error) {
+    console.error("Error when retrieving from db", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
