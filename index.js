@@ -105,7 +105,7 @@ app.post("/login", async (req, res) => {
   };
   const token = jwt.sign(payload, secretKey, { expiresIn: "24h" });
   res.json({
-    token: "token",
+    token: token,
   });
 });
 app.post("/accept-html", async (req, res) => {
