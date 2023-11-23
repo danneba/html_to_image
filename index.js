@@ -1,11 +1,13 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 const { Pool } = require("pg");
 const fs = require("fs");
 const path = require("path");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
+const authController = require("./controller/auth.controller");
 const nodeHtmlToImage = require("node-html-to-image");
 const cloudinary = require("./cloudinary");
 const { error } = require("console");
@@ -97,17 +99,18 @@ app.post("/convert-to-image", async (req, res) => {
   }
 });
 
-app.post("/login", async (req, res) => {
-  const payload = {
-    id: "1234",
-    username: "danneba",
-    email: "danielkassahun2@gmail.com",
-  };
-  const token = jwt.sign(payload, secretKey, { expiresIn: "24h" });
-  res.json({
-    token: token,
-  });
-});
+// app.post("/login", async (req, res) => {
+//   const payload = {
+//     id: "1234",
+//     username: "danneba",
+//     email: "danielkassahun2@gmail.com",
+//   };
+//   const token = jwt.sign(payload, secretKey, { expiresIn: "24h" });
+//   res.json({
+//     token: token,
+//   });
+// });
+app.post("/login", authController.login);
 app.post("/accept-html", async (req, res) => {
   console.log("htmlcontent", req.body);
   const htmlContent = req.body.htmlReq;
