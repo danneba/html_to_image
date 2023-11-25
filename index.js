@@ -7,13 +7,12 @@ const path = require("path");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 const authController = require("./controller/auth.controller");
 const userController = require("./controller/user.controller");
 const nodeHtmlToImage = require("node-html-to-image");
 const cloudinary = require("./cloudinary");
 const { error } = require("console");
-
-require("dotenv").config();
 
 const app = express();
 const secretKey = crypto.randomBytes(32).toString("hex");
