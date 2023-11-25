@@ -17,21 +17,6 @@ const signup = async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
 
-    const usernameValidation = check("name")
-      .notEmpty()
-      .withMessage("Username is Required")
-      .isLength({ min: 4 })
-      .withMessage("Username can not be lessthan 4");
-    const emailValidation = check("email")
-      .notEmpty()
-      .withMessage("Email is required")
-      .isEmail()
-      .withMessage("Invalid Email");
-
-    const passwordValidation = check("password")
-      .isStrongPassword()
-      .withMessage("password must be at least 8 characters");
-
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {

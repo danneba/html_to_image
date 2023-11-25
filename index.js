@@ -10,6 +10,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const authController = require("./controller/auth.controller");
 const userController = require("./controller/user.controller");
+const userRoutes = require("./routes/user.routes");
 const nodeHtmlToImage = require("node-html-to-image");
 const cloudinary = require("./cloudinary");
 const { error } = require("console");
@@ -111,7 +112,8 @@ app.post("/convert-to-image", async (req, res) => {
 //   });
 // });
 app.post("/login", authController.login);
-app.post("/signup", userController.signup);
+// app.post("/signup", userController.signup);
+app.use("/user", userRoutes);
 
 app.post("/accept-html", async (req, res) => {
   console.log("htmlcontent", req.body);
