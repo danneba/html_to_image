@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const jwtUtils = require("../utils/jwtUtils");
 const { check, validationResult } = require("express-validator");
 const { Pool, Client } = require("pg");
+require("dotenv").config();
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
