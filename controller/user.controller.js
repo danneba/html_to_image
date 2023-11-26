@@ -2,7 +2,6 @@ const bcrypt = require("bcrypt");
 const jwtUtils = require("../utils/jwtUtils");
 const { check, validationResult } = require("express-validator");
 const { Pool, Client } = require("pg");
-require("dotenv").config();
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -17,10 +16,10 @@ const signup = async (req, res) => {
     const name = req.body.name;
     const email = req.body.email;
     const password = req.body.password;
-
+    console.log(name, email, password);
     const errors = validationResult(req);
 
-    if (!errors.isEmpty()) {
+    if (errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
