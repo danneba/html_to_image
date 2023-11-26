@@ -10,13 +10,13 @@ const pool = new Pool({
 });
 
 const login = async (req, res) => {
-  const username = req.body.username;
+  const name = req.body.name;
   const password = req.body.password;
 
   const client = await pool.connect();
   try {
-    const query = `SELECT * FROM users where username = $1`;
-    const values = [username];
+    const query = `SELECT * FROM users where name = $1`;
+    const values = [name];
 
     const result = await client.query(query, values);
     if (result.rows.length === 0) {
@@ -27,7 +27,7 @@ const login = async (req, res) => {
     if (!isPasswordMatches) {
       return res.status(401).json({ message: "Invalid username or password" });
     }
-    const token = jwtUtils.generateJWT(user.id, user.username);
+    const token = jwtUtils.generateJWT(user.id, user.name);
     res.json({ token });
   } catch (error) {
     console.error(`Error fetching user: ${error.message} `);
