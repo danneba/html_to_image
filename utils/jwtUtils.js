@@ -1,9 +1,9 @@
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
-const generateJWT = (userId, username) => {
+const generateJWT = (userId, email) => {
   const payload = {
     userId,
-    username,
+    email,
   };
   const secretKey = crypto.randomBytes(32).toString("hex");
   const options = { expiresIn: "24h" };
