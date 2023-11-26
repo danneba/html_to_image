@@ -24,7 +24,7 @@ const login = async (req, res) => {
     }
     const user = result.rows[0];
     const isPasswordMatches = await bcrypt.compare(password, user.password);
-    if (isPasswordMatches) {
+    if (!isPasswordMatches) {
       return res.status(401).json({ message: "Invalid username or password" });
     }
     const token = jwtUtils.generateJWT(user.id, user.username);
